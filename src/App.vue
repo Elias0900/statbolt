@@ -24,7 +24,9 @@ const players = ref<Player[]>([
       defensiveRebounds: 0,
       assists: 0,
       steals: 0,
-      turnovers: 0
+      block:0,
+      turnovers: 0,
+      evaluation: 0
     }
   }
 ]);
@@ -46,7 +48,9 @@ const addPlayer = () => {
       defensiveRebounds: 0,
       assists: 0,
       steals: 0,
-      turnovers: 0
+      block: 0,
+      turnovers: 0,
+      evaluation: 0
     }
   };
   players.value.push(newPlayer);
