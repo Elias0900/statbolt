@@ -174,6 +174,17 @@ const handleSaveGame = async (gameName: string) => {
   transition: all 0.2s ease;
 }
 
+.save-game-btn {
+  margin-right: 1rem;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
 .add-player:disabled {
   background-color: #94a3b8;
   cursor: not-allowed;
