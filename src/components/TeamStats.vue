@@ -118,6 +118,59 @@ const exportStatsPDF = () => {
   <div class="team-stats">
     <div class="team-stats-header">
       <h2>Statistiques d'équipe</h2>
+      <div class="stats-container">
+      <div class="stat-group">
+        <h3>Points</h3>
+        <div class="stat-value">Total: {{ teamStats.totalPoints }}</div>
+        <div class="stat-row">
+          <span>2pts:</span>
+          <span>{{ teamStats.points2Made }}/{{ teamStats.points2Made + teamStats.points2Missed }}</span>
+          <span class="percentage">{{ teamStats.shootingPercentages.points2.toFixed(1) }}%</span>
+        </div>
+        <div class="stat-row">
+          <span>3pts:</span>
+          <span>{{ teamStats.points3Made }}/{{ teamStats.points3Made + teamStats.points3Missed }}</span>
+          <span class="percentage">{{ teamStats.shootingPercentages.points3.toFixed(1) }}%</span>
+        </div>
+        <div class="stat-row">
+          <span>LF:</span>
+          <span>{{ teamStats.freeThrowsMade }}/{{ teamStats.freeThrowsMade + teamStats.freeThrowsMissed }}</span>
+          <span class="percentage">{{ teamStats.shootingPercentages.freeThrows.toFixed(1) }}%</span>
+        </div>
+      </div>
+
+      <div class="stat-group">
+        <h3>Rebonds</h3>
+        <div class="stat-row">
+          <span>Offensifs:</span>
+          <span>{{ teamStats.offensiveRebounds }}</span>
+        </div>
+        <div class="stat-row">
+          <span>Défensifs:</span>
+          <span>{{ teamStats.defensiveRebounds }}</span>
+        </div>
+        <div class="stat-row total">
+          <span>Total:</span>
+          <span>{{ teamStats.offensiveRebounds + teamStats.defensiveRebounds }}</span>
+        </div>
+      </div>
+
+      <div class="stat-group">
+        <h3>Autres</h3>
+        <div class="stat-row">
+          <span>Passes décisives:</span>
+          <span>{{ teamStats.assists }}</span>
+        </div>
+        <div class="stat-row">
+          <span>Interceptions:</span>
+          <span>{{ teamStats.steals }}</span>
+        </div>
+        <div class="stat-row">
+          <span>Pertes de balle:</span>
+          <span>{{ teamStats.turnovers }}</span>
+        </div>
+      </div>
+    </div>
       <button class="export-btn" @click="exportStatsPDF">
         📥 Exporter en PDF
       </button>
@@ -127,5 +180,64 @@ const exportStatsPDF = () => {
 </template>
 
 <style scoped>
+.team-stats {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.team-stats h2 {
+  margin: 0 0 1.5rem 0;
+  color: #1e293b;
+  font-size: 1.5rem;
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-group {
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.stat-group h3 {
+  margin: 0 0 1rem 0;
+  color: #475569;
+  font-size: 1.25rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+}
+
+.stat-row.total {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.percentage {
+  color: #64748b;
+}
 /* Existing styles remain unchanged */
 </style>

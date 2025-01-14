@@ -11,7 +11,7 @@ interface Game {
 let supabase: ReturnType<typeof createClient> | null = null;
 
 const initializeSupabase = () => {
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseUrl = 'https://uhenpkoirvnvrcohxrcc.supabase.co'
   const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
   
   if (!supabaseUrl || !supabaseKey) {

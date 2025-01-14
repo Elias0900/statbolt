@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import type { Player } from '../types';
+import jsPDF from 'jspdf';
 
 const props = defineProps<{
   player: Player;
@@ -65,33 +66,50 @@ const decrementStat = (statName: keyof Player['stats']) => {
   }
 };
 
-const exportPlayerStats = () => {
-  const stats = {
-    player: props.player.name,
-    playingTime: formatTime(props.player.playingTime),
-    stats: {
-      ...props.player.stats,
-      totalPoints: totalPoints.value,
-      shootingPercentages: shootingPercentage.value
-    }
-  };
+const exportStatsPDF = () => {
+  const doc = new jsPDF();
+  const now = new Date().toLocaleDateString('fr-FR');
   
-  const blob = new Blob([JSON.stringify(stats, null, 2)], { type: 'application/json' });
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${props.player.name.replace(/\s+/g, '_')}_stats.json`;
-  a.click();
-  window.URL.revokeObjectURL(url);
+  // Title
+  doc.setFontSize(20);
+  doc.text('Rapport de Match - ' + now, 20, 20);
+  
+  // Joueur Stats
+  doc.setFontSize(16);
+  doc.text('Statistiques de ' + props.player.name, 20, 40);
+  
+  const teamData = [
+    ['Points totaux', props.player.stats.points2Made.toString()],
+    ['Tirs à 2pts', `${props.player.stats.points2Made} / ${props.player.stats.points2Made + props.player.stats.points2Missed} (${shootingPercentage.value.points2.toFixed(1)}%)`],
+    ['Tirs à 3pts', `(${props.player.stats.points3Made} / ${props.player.stats.points3Made + props.player.stats.points3Missed})(${shootingPercentage.value.points3.toFixed(1)}%)`],
+    ['Lancer-Francs', `(${props.player.stats.freeThrowsMade} / ${props.player.stats.freeThrowsMade + props.player.stats.freeThrowsMissed})(${shootingPercentage.value.freeThrows}%)`],
+    ['Rebonds Off/Def', `${props.player.stats.offensiveRebounds + props.player.stats.defensiveRebounds} (${props.player.stats.offensiveRebounds} / ${props.player.stats.defensiveRebounds}) `],
+    ['Passes décisives', props.player.stats.assists.toString()],
+    ['Interceptions', props.player.stats.steals.toString()],
+    ['Pertes de balle', props.player.stats.turnovers.toString()]
+  ];
+  
+  (doc as any).autoTable({
+    startY: 45,
+    head: [['Statistique', 'Valeur']],
+    body: teamData,
+    theme: 'striped',
+    headStyles: { fillColor: [79, 70, 229] }
+  });
+ 
+  // Save the PDF with all stats
+  doc.save('statistiques_' + props.player.name + '.pdf');
 };
+
 </script>
 
 <template>
   <div class="player-card">
     <div class="player-header">
+      <button class="edit-btn">✏️</button>
       <div v-if="!isEditingName" @click="isEditingName = true" class="player-name">
-        <h3>{{ player.name }}</h3>
-        <button class="edit-btn">✏️</button>
+        <h4>{{ player.name }}</h4>
+        <h4> {{ totalPoints }} Pts</h4>
       </div>
       <div v-else class="name-edit">
         <input 
@@ -198,7 +216,7 @@ const exportPlayerStats = () => {
       <div class="total-points">
         Points totaux: {{ totalPoints }}
       </div>
-      <button class="export-btn" @click="exportPlayerStats">
+      <button class="export-btn" @click="exportStatsPDF">
         📥 Exporter
       </button>
     </div>

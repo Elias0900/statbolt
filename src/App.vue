@@ -94,6 +94,7 @@ const handleSaveGame = async (gameName: string) => {
   } catch (error) {
     console.error('Erreur lors de la sauvegarde:', error);
     alert('Erreur lors de la sauvegarde du match');
+    console.log(import.meta.env.VITE_SUPABASE_ANON_KEY)
   }
 };
 </script>
@@ -199,7 +200,7 @@ const handleSaveGame = async (gameName: string) => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1rem;
-  padding: 1rem;
+  padding-top: 1rem;
 }
 
 @media (min-width: 1400px) {
