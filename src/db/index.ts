@@ -51,7 +51,7 @@ export const loadGames = async () => {
   
   return data.map(game => ({
     ...game,
-    date: new Date(game.date),
+    date: new Date(),
     players: game.data
   }))
 }
