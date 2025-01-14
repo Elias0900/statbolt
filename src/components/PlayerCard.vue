@@ -33,13 +33,15 @@ const plusminus = computed(() => {
     props.player.stats.offensiveRebounds +
     props.player.stats.assists +
     props.player.stats.steals +
-    props.player.stats.block +
-    (props.player.stats.points2Made - props.player.stats.points2Missed) +
-    (props.player.stats.points3Made - props.player.stats.points3Missed) +
-    (props.player.stats.freeThrowsMade - props.player.stats.freeThrowsMissed) - 
+    props.player.stats.block - 
+    props.player.stats.points2Missed - 
+    props.player.stats.points3Missed - 
+    props.player.stats.freeThrowsMissed - 
     props.player.stats.turnovers
   );
 });
+
+props.player.stats.evaluation = plusminus.value
 
 const shootingPercentage = computed(() => {
   return {
@@ -98,14 +100,14 @@ const exportStatsPDF = () => {
   const teamData = [
     ['Points totaux', props.player.stats.points2Made.toString()],
     ['Tirs à 2pts', `${props.player.stats.points2Made} / ${props.player.stats.points2Made + props.player.stats.points2Missed} (${shootingPercentage.value.points2.toFixed(1)}%)`],
-    ['Tirs à 3pts', `(${props.player.stats.points3Made} / ${props.player.stats.points3Made + props.player.stats.points3Missed})(${shootingPercentage.value.points3.toFixed(1)}%)`],
-    ['Lancer-Francs', `(${props.player.stats.freeThrowsMade} / ${props.player.stats.freeThrowsMade + props.player.stats.freeThrowsMissed})(${shootingPercentage.value.freeThrows}%)`],
+    ['Tirs à 3pts', `(${props.player.stats.points3Made} / ${props.player.stats.points3Made + props.player.stats.points3Missed}) (${shootingPercentage.value.points3.toFixed(1)}%)`],
+    ['Lancer-Francs', `(${props.player.stats.freeThrowsMade} / ${props.player.stats.freeThrowsMade + props.player.stats.freeThrowsMissed}) (${shootingPercentage.value.freeThrows.toFixed(1)}%)`],
     ['Rebonds Off/Def', `${props.player.stats.offensiveRebounds + props.player.stats.defensiveRebounds} (${props.player.stats.offensiveRebounds} / ${props.player.stats.defensiveRebounds}) `],
     ['Passes décisives', props.player.stats.assists.toString()],
     ['Interceptions', props.player.stats.steals.toString()],
     ['Contres', props.player.stats.block.toString()],
     ['Pertes de balle', props.player.stats.turnovers.toString()],
-    ['Evaluation', props.player.stats.evaluation.toString()]
+    ['Evaluation', plusminus.value.toString()]
   ];
   
   (doc as any).autoTable({
@@ -239,7 +241,7 @@ const exportStatsPDF = () => {
 
     <div class="card-footer">
       <div class="total-points">
-        Evaluation: {{ plusminus }}
+        Evaluation: {{ player.stats.evaluation }}
       </div>
       <button class="export-btn" @click="exportStatsPDF">
         📥 Exporter

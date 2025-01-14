@@ -103,7 +103,7 @@ const exportStatsPDF = () => {
     player.stats.steals.toString(),
     player.stats.block.toString(),
     player.stats.turnovers.toString(),
-    player.stats.evaluation.toString()
+    player.stats.evaluation
   ]);
   
   (doc as any).autoTable({
