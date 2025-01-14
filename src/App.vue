@@ -8,33 +8,46 @@ import { saveGame } from './db';
 
 const showSaveModal = ref(false);
 
-const initialPlayerState: Player = {
-  id: 1,
-  name: "Joueur 1",
-  playingTime: 0,
-  stats: {
-    points2Made: 0,
-    points2Missed: 0,
-    points3Made: 0,
-    points3Missed: 0,
-    freeThrowsMade: 0,
-    freeThrowsMissed: 0,
-    offensiveRebounds: 0,
-    defensiveRebounds: 0,
-    assists: 0,
-    steals: 0,
-    turnovers: 0
+const players = ref<Player[]>([
+  {
+    id: 1,
+    name: "Joueur 1",
+    playingTime: 0,
+    stats: {
+      points2Made: 0,
+      points2Missed: 0,
+      points3Made: 0,
+      points3Missed: 0,
+      freeThrowsMade: 0,
+      freeThrowsMissed: 0,
+      offensiveRebounds: 0,
+      defensiveRebounds: 0,
+      assists: 0,
+      steals: 0,
+      turnovers: 0
+    }
   }
-};
-
-const players = ref<Player[]>([{ ...initialPlayerState }]);
+]);
 
 const addPlayer = () => {
   if (players.value.length >= 10) return;
   const newPlayer: Player = {
-    ...initialPlayerState,
     id: players.value.length + 1,
     name: `Joueur ${players.value.length + 1}`,
+    playingTime: 0,
+    stats: {
+      points2Made: 0,
+      points2Missed: 0,
+      points3Made: 0,
+      points3Missed: 0,
+      freeThrowsMade: 0,
+      freeThrowsMissed: 0,
+      offensiveRebounds: 0,
+      defensiveRebounds: 0,
+      assists: 0,
+      steals: 0,
+      turnovers: 0
+    }
   };
   players.value.push(newPlayer);
 };
@@ -128,5 +141,59 @@ const handleSaveGame = async (gameName: string) => {
 </template>
 
 <style scoped>
-/* Existing styles remain unchanged */
+.app-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #1e293b;
+}
+
+.add-player {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.add-player:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.add-player:not(:disabled):hover {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+}
+
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+@media (min-width: 1400px) {
+  .players-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
 </style>
