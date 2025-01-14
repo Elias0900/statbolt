@@ -20,8 +20,10 @@ const teamStats = computed<TeamStats>(() => {
     defensiveRebounds: 0,
     assists: 0,
     steals: 0,
+    block: 0,
     turnovers: 0,
     totalPoints: 0,
+    evaluation: 0,
     shootingPercentages: {
       points2: 0,
       points3: 0,
@@ -99,12 +101,14 @@ const exportStatsPDF = () => {
     (player.stats.offensiveRebounds + player.stats.defensiveRebounds).toString(),
     player.stats.assists.toString(),
     player.stats.steals.toString(),
-    player.stats.turnovers.toString()
+    player.stats.block.toString(),
+    player.stats.turnovers.toString(),
+    player.stats.evaluation.toString()
   ]);
   
   (doc as any).autoTable({
     startY: (doc as any).lastAutoTable.finalY + 25,
-    head: [['Joueur', 'Temps', 'Pts', '2pts', '3pts', 'LF', 'Reb', 'Pas', 'Int', 'BP']],
+    head: [['Joueur', 'Temps', 'Pts', '2pts', '3pts', 'LF', 'Reb', 'Pas', 'Int', 'Blk', 'BP', '+/-']],
     body: playerData,
     theme: 'striped',
     headStyles: { fillColor: [79, 70, 229] }

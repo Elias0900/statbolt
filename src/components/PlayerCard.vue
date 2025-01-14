@@ -24,6 +24,23 @@ const totalPoints = computed(() => {
          props.player.stats.freeThrowsMade;
 });
 
+const plusminus = computed(() => {
+  return (
+    props.player.stats.freeThrowsMade +
+    props.player.stats.points2Made +
+    props.player.stats.points3Made +
+    props.player.stats.defensiveRebounds +
+    props.player.stats.offensiveRebounds +
+    props.player.stats.assists +
+    props.player.stats.steals +
+    props.player.stats.block +
+    (props.player.stats.points2Made - props.player.stats.points2Missed) +
+    (props.player.stats.points3Made - props.player.stats.points3Missed) +
+    (props.player.stats.freeThrowsMade - props.player.stats.freeThrowsMissed) - 
+    props.player.stats.turnovers
+  );
+});
+
 const shootingPercentage = computed(() => {
   return {
     points2: (props.player.stats.points2Made / (props.player.stats.points2Made + props.player.stats.points2Missed)) * 100 || 0,
@@ -86,7 +103,9 @@ const exportStatsPDF = () => {
     ['Rebonds Off/Def', `${props.player.stats.offensiveRebounds + props.player.stats.defensiveRebounds} (${props.player.stats.offensiveRebounds} / ${props.player.stats.defensiveRebounds}) `],
     ['Passes décisives', props.player.stats.assists.toString()],
     ['Interceptions', props.player.stats.steals.toString()],
-    ['Pertes de balle', props.player.stats.turnovers.toString()]
+    ['Contres', props.player.stats.block.toString()],
+    ['Pertes de balle', props.player.stats.turnovers.toString()],
+    ['Evaluation', props.player.stats.evaluation.toString()]
   ];
   
   (doc as any).autoTable({
@@ -203,6 +222,12 @@ const exportStatsPDF = () => {
             <button class="danger" @click="decrementStat('steals')">-</button>
           </div>
           <div class="stat-control-row">
+            <button class="neutral" @click="emit('updateStat', 'block', player.stats.block + 1)">
+              Contres: {{ player.stats.block }}
+            </button>
+            <button class="danger" @click="decrementStat('block')">-</button>
+          </div>
+          <div class="stat-control-row">
             <button class="neutral" @click="emit('updateStat', 'turnovers', player.stats.turnovers + 1)">
               Pertes: {{ player.stats.turnovers }}
             </button>
@@ -214,7 +239,7 @@ const exportStatsPDF = () => {
 
     <div class="card-footer">
       <div class="total-points">
-        Points totaux: {{ totalPoints }}
+        Evaluation: {{ plusminus }}
       </div>
       <button class="export-btn" @click="exportStatsPDF">
         📥 Exporter

@@ -16,7 +16,9 @@ export interface PlayerStats {
   defensiveRebounds: number;
   assists: number;
   steals: number;
+  block: number;
   turnovers: number;
+  evaluation: number;
 }
 
 export interface TeamStats extends PlayerStats {
