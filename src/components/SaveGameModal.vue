@@ -21,7 +21,7 @@ const handleSave = () => {
 </script>
 
 <template>
-  <div v-if="show" class="modal-overlay">
+  <div v-if="props.show" class="modal-overlay">
     <div class="modal">
       <h2>Sauvegarder le match</h2>
       <div class="modal-content">

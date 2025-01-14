@@ -75,7 +75,7 @@ const updatePlayerName = (playerId: number, name: string) => {
 
 const resetGame = () => {
   players.value = players.value.map((player, index) => ({
-    ...initialPlayerState,
+    ...player,
     id: index + 1,
     name: player.name
   }));

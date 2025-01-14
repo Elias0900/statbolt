@@ -14,7 +14,7 @@ const emit = defineEmits<{
 }>();
 
 const isTimerRunning = ref(false);
-const timerInterval = ref<number | null>(null);
+const timerInterval = ref<ReturnType<typeof setInterval> | null>(null);
 const isEditingName = ref(false);
 const editedName = ref(props.player.name);
 
