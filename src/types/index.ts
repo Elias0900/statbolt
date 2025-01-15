@@ -3,6 +3,7 @@ export interface Player {
   name: string;
   stats: PlayerStats;
   playingTime: number; // en secondes
+  onCourt: boolean;
 }
 
 export interface PlayerStats {
