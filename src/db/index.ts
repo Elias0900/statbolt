@@ -42,16 +42,23 @@ export const saveGame = async (game: Game) => {
 
 export const loadGames = async () => {
   const client = initializeSupabase();
+
+  // Requête à la base de données
   const { data, error } = await client
-    .from('games')
-    .select('*')
-    .order('date', { ascending: false })
-  
-  if (error) throw error
-  
+      .from('games')
+      .select('*')
+      .order('date', { ascending: false });
+
+  // Gestion des erreurs
+  if (error) {
+    console.error('Erreur lors de la récupération des jeux :', error);
+    throw error;
+  }
+
+  // Transformation des données
   return data.map(game => ({
     ...game,
-    date: new Date(),
-    players: game.data
-  }))
-}
+    date: new Date(game.date), // Convertit la date string en objet Date
+    players: game.players || [] // Assure que "players" est bien mappé
+  }));
+};

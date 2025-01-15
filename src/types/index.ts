@@ -3,6 +3,7 @@ export interface Player {
   name: string;
   stats: PlayerStats;
   playingTime: number; // en secondes
+  onCourt: boolean;
 }
 
 export interface PlayerStats {
@@ -28,4 +29,10 @@ export interface TeamStats extends PlayerStats {
     points3: number;
     freeThrows: number;
   };
+}
+
+export interface Game {
+  date: Date;
+  name: string;
+  players: Player[];
 }
