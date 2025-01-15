@@ -30,3 +30,9 @@ export interface TeamStats extends PlayerStats {
     freeThrows: number;
   };
 }
+
+export interface Game {
+  date: Date;
+  name: string;
+  players: Player[];
+}
