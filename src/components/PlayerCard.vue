@@ -14,7 +14,7 @@ const emit = defineEmits<{
 }>();
 
 const isTimerRunning = ref(false);
-const timerInterval = ref<ReturnType<typeof setInterval> | null>(null);
+const timerInterval = ref<number | null>(null);
 const isEditingName = ref(false);
 const editedName = ref(props.player.name);
 
@@ -59,13 +59,13 @@ const formatTime = (seconds: number): string => {
 
 const toggleTimer = () => {
   if (isTimerRunning.value) {
-    if (timerInterval.value) {
+    if (timerInterval.value !== null) {
       clearInterval(timerInterval.value);
       timerInterval.value = null;
     }
     isTimerRunning.value = false;
   } else {
-    timerInterval.value = setInterval(() => {
+    timerInterval.value = window.setInterval(() => {
       emit('updateTime', props.player.playingTime + 1);
     }, 1000);
     isTimerRunning.value = true;
@@ -252,44 +252,45 @@ const exportStatsPDF = () => {
 
 <style scoped>
 .player-card {
-  background: white;
-  border-radius: 12px;
-  padding: 1.25rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: rgb(253, 253, 253);
+  border-radius: 8px; /* Réduction des bordures */
+  padding: 0.75rem; /* Réduction du padding */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
 }
 
 .player-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
+  background: rgba(140,140,140,0.47);
 }
 
 .player-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
+  margin-bottom: 0.5rem; /* Réduction des marges */
+  padding-bottom: 0.2rem;
   border-bottom: 1px solid #e2e8f0;
 }
 
 .player-name {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem; /* Espacement réduit */
   cursor: pointer;
 }
 
 .player-name h3 {
   margin: 0;
   color: #1e293b;
-  font-size: 1.25rem;
+  font-size: 0.5rem; /* Taille de texte réduite */
 }
 
 .edit-btn {
   background: none;
   border: none;
-  padding: 0.25rem;
-  font-size: 1rem;
+  padding: 0.2rem;
+  font-size: 1rem; /* Taille de texte réduite */
   cursor: pointer;
   opacity: 0.5;
   transition: opacity 0.2s ease;
@@ -302,29 +303,28 @@ const exportStatsPDF = () => {
 .name-edit {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }
 
 .name-input {
-  padding: 0.5rem;
+  padding: 0.25rem; /* Réduction du padding */
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  font-size: 1.25rem;
-  width: 200px;
+  border-radius: 4px; /* Bordures réduites */
+  font-size: 1rem; /* Taille réduite */
+  width: 150px; /* Largeur réduite */
 }
 
 .time-control {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }
 
 .time-btn {
-  padding: 0.5rem;
-  font-size: 1.25rem;
-  line-height: 1;
-  width: 40px;
-  height: 40px;
+  padding: 0.25rem; /* Boutons plus petits */
+  font-size: 1rem; /* Taille réduite */
+  width: 32px; /* Boutons plus petits */
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -342,46 +342,49 @@ const exportStatsPDF = () => {
 
 .time-display {
   font-family: monospace;
-  font-size: 1.25rem;
+  font-size: 1rem; /* Taille réduite */
   color: #475569;
-  min-width: 60px;
+  min-width: 50px;
   text-align: center;
 }
 
 .stats-grid {
   display: grid;
-  gap: 1rem;
+  gap: 0.2rem; /* Réduction des espaces */
 }
 
 .stat-group {
   background: #f8fafc;
-  padding: 0.75rem;
-  border-radius: 8px;
+  padding: 0.2rem; /* Réduction du padding */
+  border-radius: 1px; /* Bordures réduites */
+}
+.stat-group:hover {
+  background: rgba(140,140,140,0.47);
 }
 
 .stat-group h4 {
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.25rem 0; /* Espacement réduit */
   color: #475569;
-  font-size: 0.875rem;
+  font-size: 0.7rem; /* Taille réduite */
 }
 
 .stat-controls {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  gap: 0.9rem;
+  margin-bottom: 0.1rem;
 }
 
 .stat-value {
   flex: 1;
   text-align: center;
   font-family: monospace;
-  font-size: 1.125rem;
+  font-size: 1rem; /* Taille réduite */
 }
 
 .stat-buttons {
   display: grid;
-  gap: 0.5rem;
+  gap: 0.1rem;
 }
 
 .stat-control-row {
@@ -395,7 +398,7 @@ const exportStatsPDF = () => {
 }
 
 button.success {
-  background-color: #22c55e;
+  background-color: #84b483;
 }
 
 button.success:hover {
@@ -403,8 +406,8 @@ button.success:hover {
 }
 
 button.danger {
-  background-color: #ef4444;
-  padding: 0.25rem 0.5rem;
+  background-color: #ec9898;
+  padding: 0.2rem 0.4rem;
 }
 
 button.danger:hover {
@@ -412,23 +415,22 @@ button.danger:hover {
 }
 
 button.neutral {
-  background-color: #64748b;
+  background-color: #505865;
 }
 
 button.neutral:hover {
-  background-color: #475569;
+  background-color: #5086ce;
 }
 
 .percentage {
   text-align: right;
-  font-size: 0.875rem;
-  color: #64748b;
+  font-size: 0.7rem; /* Taille réduite */
+  color: #111317;
 }
 
 .card-footer {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e2e8f0;
+  margin-top: 0.2rem;
+  padding-top: 0.2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -436,15 +438,16 @@ button.neutral:hover {
 
 .total-points {
   font-weight: 600;
-  color: #1e293b;
+  color: #1e1c1c;
+  font-size: 1rem; /* Taille réduite */
 }
 
 .export-btn {
-  background-color: #3b82f6;
+  background-color: #b5c0d3;
   transition: background-color 0.2s ease;
 }
 
 .export-btn:hover {
-  background-color: #2563eb;
+  background-color: #7690c4;
 }
 </style>

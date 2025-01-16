@@ -174,14 +174,14 @@ const toggleTimer = () => {
         >
           📊 Historique des matchs
         </button>
-        <button 
-          class="save-game-btn" 
+        <button
+          class="save-game-btn"
           @click="showSaveModal = true"
         >
           💾 Sauvegarder le match
         </button>
-        <button 
-          class="add-player" 
+        <button
+          class="add-player"
           @click="addPlayer"
           :disabled="players.length >= 10"
         >
@@ -215,7 +215,7 @@ const toggleTimer = () => {
     </div>
 
     <TeamStats :players="players" />
-    
+
     <div class="players-grid">
       <PlayerCard
         v-for="player in players"
@@ -245,7 +245,7 @@ const toggleTimer = () => {
 .app-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
 /* Header */
@@ -254,9 +254,9 @@ const toggleTimer = () => {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   margin-bottom: 2rem;
-  padding: 1rem;
+  padding: 0.5rem;
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -264,7 +264,7 @@ const toggleTimer = () => {
 
 .header h1 {
   margin: 0;
-  font-size: 2rem;
+  font-size: 1rem;
   color: #1e293b;
   flex: 1;
   min-width: 200px;
@@ -274,10 +274,10 @@ const toggleTimer = () => {
 button {
   border: none;
   cursor: pointer;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 300;
+  font-size: 0.7rem;
   transition: all 0.3s ease;
 }
 
@@ -286,7 +286,7 @@ button {
 .history-btn{
   background-color: #4f46e5;
   color: #ffffff;
-  margin-right: 1rem;
+  margin-right: 0.5rem;
 }
 
 .add-player:disabled,
@@ -303,43 +303,46 @@ button:not(:disabled):hover {
 /* Grid */
 .players-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  gap: 0.75rem;
   padding-top: 1rem;
 }
 
 /* Game Controls */
 .game-controls {
   background: #ffffff;
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 12px;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center; /* Centre horizontalement */
+  align-items: center; /* Centre verticalement */
 }
 
 /* On Court Players */
 .on-court-players {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .on-court-players h3 {
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.25rem 0;
   color: #1e293b;
-  font-size: 1.2rem;
+  font-size: 0.8rem;
 }
 
 /* Player Chips */
 .player-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.25rem;
   margin-bottom: 1rem;
 }
 
 .player-chip {
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 0.25rem;
   background: #e2e8f0;
-  border-radius: 20px;
+  border-radius: 5px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -351,14 +354,18 @@ button:not(:disabled):hover {
 
 /* Timer Button */
 .timer-btn {
-  width: 100%;
-  padding: 1rem;
-  font-size: 1.2rem;
+  width: 25%;
+  padding: 0.2rem;
+  font-size: 1rem;
   font-weight: bold;
   border: none;
-  border-radius: 12px;
+  border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto; /* Centre le bouton horizontalement dans son conteneur */
+
 }
 
 .timer-btn.running {
@@ -369,11 +376,11 @@ button:not(:disabled):hover {
 /* Media Queries for Responsive Design */
 @media (min-width: 768px) {
   .header {
-    gap: 2rem;
+    gap: 1rem;
   }
 
   button {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
   }
 
   .timer-btn {
@@ -383,11 +390,11 @@ button:not(:disabled):hover {
 
 @media (min-width: 1024px) {
   .players-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 
   .header h1 {
-    font-size: 2.2rem;
+    font-size: 1.5rem;
   }
 }
 
