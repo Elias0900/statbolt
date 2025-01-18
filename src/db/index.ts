@@ -15,7 +15,6 @@ const initializeSupabase = () => {
   // Accéder aux variables d'environnement VITE_
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-  const environment = import.meta.env.MODE; // 'development' or 'production'
 
 
   if (!supabaseUrl || !supabaseKey) {
