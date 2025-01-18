@@ -1,7 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Player } from '../types';
-import dotenv from 'dotenv';
-
 
 interface Game {
   id?: number; // Facultatif si géré par la base
@@ -10,17 +8,15 @@ interface Game {
   players: Player[];
 }
 
-// Charger les variables d'environnement
-dotenv.config({
-  path: process.env.NODE_ENV === 'production' ? '.env.prod' : '.env.rec'
-});
-
 // Initialise le client Supabase uniquement si les variables d'environnement sont disponibles
 let supabase: ReturnType<typeof createClient> | null = null;
 
 const initializeSupabase = () => {
-  const supabaseUrl = import.meta.env.BASE_URL;
+  // Accéder aux variables d'environnement VITE_
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const environment = import.meta.env.MODE; // 'development' or 'production'
+
 
   if (!supabaseUrl || !supabaseKey) {
     throw new Error(
@@ -60,7 +56,6 @@ export const saveGame = async (game: Game): Promise<void> => {
   }
 };
 
-// Fonction pour charger les jeux depuis la base de données
 // Fonction pour charger les jeux depuis la base de données
 export const loadGames = async (): Promise<Game[]> => {
   const client = initializeSupabase();
