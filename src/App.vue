@@ -335,14 +335,14 @@ button:not(:disabled):hover {
 .player-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem;
+  gap: 0.7rem;
   margin-bottom: 1rem;
 }
 
 .player-chip {
-  padding: 0.25rem 0.25rem;
+  padding: 0.5rem 0.5rem;
   background: #e2e8f0;
-  border-radius: 5px;
+  border-radius: 7px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -400,7 +400,7 @@ button:not(:disabled):hover {
 
 @media (min-width: 1400px) {
   .players-grid {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 </style>

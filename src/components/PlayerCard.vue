@@ -261,7 +261,7 @@ const exportStatsPDF = () => {
 
 .player-card:hover {
   transform: translateY(-1px);
-  background: rgba(140,140,140,0.47);
+  background: rgba(243, 243, 243, 0.96);
 }
 
 .player-header {
@@ -359,7 +359,7 @@ const exportStatsPDF = () => {
   border-radius: 1px; /* Bordures réduites */
 }
 .stat-group:hover {
-  background: rgba(140,140,140,0.47);
+  background: #CBCBCBFF;
 }
 
 .stat-group h4 {
