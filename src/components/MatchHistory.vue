@@ -2,6 +2,7 @@
 import {ref, onMounted, Ref, watch} from 'vue';
 import { loadGames } from '../db';
 import type { Game } from '../types';
+import jsPDF from "jspdf";
 
 // Props et événements
 const props = defineProps<{
@@ -58,6 +59,74 @@ watch(() => props.show, (newValue) => {
   }
 });
 
+
+// Export en PDF
+const exportStatsPDF = (game: Game) => {
+  const doc = new jsPDF();
+  const now = new Date().toLocaleDateString('fr-FR');
+
+  // Title
+  doc.setFontSize(20);
+  doc.text('Rapport de Match - ' + game.name + ' ' + now, 20, 20);
+
+  // Statistiques de l'équipe
+  doc.setFontSize(16);
+  doc.text('Statistiques d\'équipe', 20, 40);
+
+  const teamData = [
+    ['Points totaux', game.players.reduce((total, player) =>
+        total + (player.stats.points2Made * 2) +
+        (player.stats.points3Made * 3) +
+        player.stats.freeThrowsMade, 0).toString()],
+    // Ajoutez d'autres statistiques d'équipe ici...
+  ];
+
+  (doc as any).autoTable({
+    startY: 45,
+    head: [['Statistique', 'Valeur']],
+    body: teamData,
+    theme: 'striped',
+    headStyles: { fillColor: [79, 70, 229] }
+  });
+
+  // Statistiques des joueurs
+  doc.setFontSize(16);
+  doc.text('Statistiques individuelles', 20, (doc as any).lastAutoTable.finalY + 20);
+
+  const playerData = game.players.map(player => [
+    player.name,
+    formatTime(player.playingTime),
+    (player.stats.points2Made * 2 + player.stats.points3Made * 3 + player.stats.freeThrowsMade).toString(),
+    `${player.stats.points2Made}/${player.stats.points2Made + player.stats.points2Missed}`,
+    `${player.stats.points3Made}/${player.stats.points3Made + player.stats.points3Missed}`,
+    `${player.stats.freeThrowsMade}/${player.stats.freeThrowsMade + player.stats.freeThrowsMissed}`,
+    (player.stats.offensiveRebounds + player.stats.defensiveRebounds).toString(),
+    player.stats.assists.toString(),
+    player.stats.steals.toString(),
+    player.stats.block.toString(),
+    player.stats.turnovers.toString(),
+    player.stats.evaluation.toString()
+  ]);
+
+  (doc as any).autoTable({
+    startY: (doc as any).lastAutoTable.finalY + 25,
+    head: [['Joueur', 'Temps', 'Pts', '2pts', '3pts', 'LF', 'Reb', 'Pas', 'Int', 'Blk', 'BP', '+/-']],
+    body: playerData,
+    theme: 'striped',
+    headStyles: { fillColor: [79, 70, 229] }
+  });
+
+  // Sauvegarder le PDF
+  doc.save('statistiques_match.pdf');
+};
+
+// Formatage du temps de jeu
+const formatTime = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}m ${remainingSeconds}s`;
+};
+
 // Monté du composant
 onMounted(() => {
   if (props.show) {
@@ -101,6 +170,7 @@ onMounted(() => {
             <div class="game-stats">
               <div class="players-count">
                 {{ game.players.length }} joueurs
+
               </div>
               <div class="total-points">
                 {{ game.players.reduce((total, player) =>
@@ -109,7 +179,11 @@ onMounted(() => {
                   player.stats.freeThrowsMade, 0)
                 }} points
               </div>
+              <div class="export">
+              </div>
             </div>
+            <button @click="exportStatsPDF(game)" class="export-btn">Exporter en PDF</button>
+
           </div>
         </div>
       </div>
@@ -192,9 +266,14 @@ onMounted(() => {
 
 .game-header {
   display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.game-header-info {
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
 }
 
 .game-header h3 {
@@ -209,9 +288,25 @@ onMounted(() => {
 
 .game-stats {
   display: flex;
+  justify-content: space-between;
   gap: 1rem;
   color: #64748b;
   font-size: 0.9rem;
+}
+
+.export-btn {
+  align-self: flex-start;
+  padding: 0.5rem 1rem;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.export-btn:hover {
+  background-color: #4338ca;
 }
 
 @media (max-width: 640px) {
@@ -220,10 +315,18 @@ onMounted(() => {
     max-height: 95vh;
   }
 
-  .game-header {
+  .game-header-info {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+  }
+
+  .game-stats {
+    flex-direction: column;
+  }
+
+  .export-btn {
+    align-self: flex-start;
+    margin-top: 10px;
   }
 }
 </style>
