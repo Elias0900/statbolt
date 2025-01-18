@@ -1,5 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Player } from '../types';
+import dotenv from 'dotenv';
+
 
 interface Game {
   id?: number; // Facultatif si géré par la base
@@ -8,11 +10,16 @@ interface Game {
   players: Player[];
 }
 
+// Charger les variables d'environnement
+dotenv.config({
+  path: process.env.NODE_ENV === 'production' ? '.env.prod' : '.env.rec'
+});
+
 // Initialise le client Supabase uniquement si les variables d'environnement sont disponibles
 let supabase: ReturnType<typeof createClient> | null = null;
 
 const initializeSupabase = () => {
-  const supabaseUrl = 'https://uhenpkoirvnvrcohxrcc.supabase.co';
+  const supabaseUrl = import.meta.env.BASE_URL;
   const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
@@ -34,7 +41,7 @@ export const saveGame = async (game: Game): Promise<void> => {
 
   try {
     const { error } = await client
-        .from('games')
+        .from('games_rec')
         .insert([
           {
             date: game.date.toISOString(),
@@ -60,7 +67,7 @@ export const loadGames = async (): Promise<Game[]> => {
 
   try {
     const { data, error } = await client
-        .from('games') // Nom de la table
+        .from('games_rec') // Nom de la table
         .select('*'); // Sélectionne toutes les colonnes
 
     if (error) {
