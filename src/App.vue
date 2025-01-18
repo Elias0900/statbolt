@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import {computed, onMounted, onUnmounted, ref} from 'vue';
 import type { Player } from './types';
 import PlayerCard from './components/PlayerCard.vue';
 import TeamStats from './components/TeamStats.vue';
@@ -9,6 +9,8 @@ import MatchHistory from "./components/MatchHistory.vue";
 
 const showSaveModal = ref(false);
 const showHistory = ref(false);
+const matchName = ref('Nom du Match');
+
 
 
 const players = ref<Player[]>([
@@ -161,34 +163,45 @@ const toggleTimer = () => {
   }
   isTimerRunning.value = !isTimerRunning.value;
 };
+
+const handleGlobalKeydown = (event: KeyboardEvent) => {
+  if (event.code === 'Space' || event.code === 'Enter') {
+    event.preventDefault(); // Empêche le comportement par défaut (ex. scroll pour "space")
+    toggleTimer();
+  }
+};
+
+// Ajouter les écouteurs d'événements clavier au montage du composant
+onMounted(() => {
+  window.addEventListener('keydown', handleGlobalKeydown);
+});
+
+// Retirer les écouteurs pour éviter les fuites mémoire
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleGlobalKeydown);
+});
 </script>
 
 <template>
   <div class="app-container">
     <header class="header">
-      <h1>Statistiques de Basketball</h1>
+      <div class="header-title">
+        <input
+            v-model="matchName"
+            class="match-name-input"
+            type="text"
+            placeholder="Nom du Match"
+        />
+      </div>
       <div class="header-actions">
-        <button
-            class="history-btn"
-            @click="showHistory = true"
-        >
-          📊 Historique des matchs
-        </button>
-        <button
-          class="save-game-btn"
-          @click="showSaveModal = true"
-        >
-          💾 Sauvegarder le match
-        </button>
-        <button
-          class="add-player"
-          @click="addPlayer"
-          :disabled="players.length >= 10"
-        >
+        <button class="history-btn" @click="showHistory = true">📊 Historique des matchs</button>
+        <button class="save-game-btn" @click="showSaveModal = true">💾 Sauvegarder le match</button>
+        <button class="add-player" @click="addPlayer" :disabled="players.length >= 10">
           Ajouter un joueur ({{ players.length }}/10)
         </button>
       </div>
     </header>
+
 
     <div class="game-controls">
       <div class="on-court-players">
@@ -209,6 +222,7 @@ const toggleTimer = () => {
           class="timer-btn"
           :class="{ running: isTimerRunning }"
           @click="toggleTimer"
+          @keydown.space.prevent = "toggleTimer"
       >
         {{ isTimerRunning ? '⏸ Pause' : '▶️ Démarrer' }} le chrono
       </button>
@@ -231,6 +245,7 @@ const toggleTimer = () => {
       :show="showSaveModal"
       @save="handleSaveGame"
       @close="showSaveModal = false"
+      :match-name="matchName"
     />
 
     <MatchHistory
@@ -246,6 +261,7 @@ const toggleTimer = () => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0.5rem;
+  overflow-x: hidden; /* Ajout pour éviter le scroll horizontal */
 }
 
 /* Header */
@@ -268,6 +284,21 @@ const toggleTimer = () => {
   color: #1e293b;
   flex: 1;
   min-width: 200px;
+}
+/* Input pour le nom du match */
+.match-name-input {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 250px;
+  transition: border-color 0.2s ease;
+}
+
+.match-name-input:focus {
+  border-color: #4f46e5;
+  outline: none;
 }
 
 /* Buttons */

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps<{
   show: boolean;
+  matchName: string;
 }>();
 
 const emit = defineEmits<{
@@ -10,12 +11,18 @@ const emit = defineEmits<{
   (e: 'close'): void;
 }>();
 
-const gameName = ref('');
+// Initialiser gameName avec la prop matchName
+const gameName = ref(props.matchName);
+
+// Regarder les changements de matchName pour synchroniser la variable gameName
+watch(() => props.matchName, (newName) => {
+  gameName.value = newName;
+});
 
 const handleSave = () => {
   if (gameName.value.trim()) {
     emit('save', gameName.value.trim());
-    gameName.value = '';
+    gameName.value = ''; // Resetter après la sauvegarde
   }
 };
 </script>
