@@ -171,6 +171,13 @@ const handleGlobalKeydown = (event: KeyboardEvent) => {
   }
 };
 
+const scrollToPlayersGrid = () => {
+  const playersGrid = document.querySelector('.players-grid');
+  if (playersGrid) {
+    playersGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
+
 // Ajouter les écouteurs d'événements clavier au montage du composant
 onMounted(() => {
   window.addEventListener('keydown', handleGlobalKeydown);
@@ -200,6 +207,12 @@ onUnmounted(() => {
           Ajouter un joueur ({{ players.length }}/10)
         </button>
       </div>
+      <button
+          class="recenter-btn"
+          @click="scrollToPlayersGrid"
+      >
+        🔍 Voir les cartes des joueurs
+      </button>
     </header>
 
 
@@ -262,6 +275,22 @@ onUnmounted(() => {
   margin: 0 auto;
   padding: 0.5rem;
   overflow-x: hidden; /* Ajout pour éviter le scroll horizontal */
+  background-color: #f8f9fa; /* Fond pâle et agréable */
+}
+
+.recenter-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #d1e7dd; /* Vert pâle */
+  color: #0f5132;
+  transition: background-color 0.3s ease;
+}
+
+.recenter-btn:hover {
+  background-color: #c7dbd4; /* Vert encore plus clair */
 }
 
 /* Header */
@@ -273,7 +302,7 @@ onUnmounted(() => {
   gap: 0.5rem;
   margin-bottom: 2rem;
   padding: 0.5rem;
-  background: #ffffff;
+  background: #e9ecef; /* Gris très clair */
   border-radius: 12px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -281,23 +310,24 @@ onUnmounted(() => {
 .header h1 {
   margin: 0;
   font-size: 1rem;
-  color: #1e293b;
+  color: #495057; /* Gris foncé pour le texte */
   flex: 1;
   min-width: 200px;
 }
 /* Input pour le nom du match */
 .match-name-input {
-  border: 1px solid #ccc;
+  border: 1px solid #ced4da;
   padding: 0.5rem;
   border-radius: 6px;
   font-size: 1rem;
   width: 100%;
   max-width: 250px;
   transition: border-color 0.2s ease;
+  background-color: #f8f9fa; /* Fond pâle */
 }
 
 .match-name-input:focus {
-  border-color: #4f46e5;
+  border-color: #86b7fe;
   outline: none;
 }
 
@@ -315,14 +345,14 @@ button {
 .add-player,
 .save-game-btn,
 .history-btn{
-  background-color: #4f46e5;
+  background-color: #adb5bd; /* Gris doux */
   color: #ffffff;
   margin-right: 0.5rem;
 }
 
 .add-player:disabled,
 .save-game-btn:disabled {
-  background-color: #94a3b8;
+  background-color: #dee2e6; /* Gris très clair */
   cursor: not-allowed;
 }
 
@@ -341,7 +371,7 @@ button:not(:disabled):hover {
 
 /* Game Controls */
 .game-controls {
-  background: #ffffff;
+  background: #e9ecef; /* Fond gris clair agréable */
   padding: 0.5rem;
   border-radius: 12px;
   margin-bottom: 0.5rem;
@@ -358,7 +388,7 @@ button:not(:disabled):hover {
 
 .on-court-players h3 {
   margin: 0 0 0.25rem 0;
-  color: #1e293b;
+  color: #495057; /* Gris foncé pour le texte */
   font-size: 0.8rem;
 }
 
@@ -372,14 +402,14 @@ button:not(:disabled):hover {
 
 .player-chip {
   padding: 0.5rem 0.5rem;
-  background: #e2e8f0;
+  background: #f8f9fa; /* Gris très clair */
   border-radius: 7px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .player-chip.active {
-  background: #4f46e5;
+  background: #adb5bd; /* Gris moyen */
   color: #ffffff;
 }
 
@@ -396,12 +426,13 @@ button:not(:disabled):hover {
   align-items: center;
   justify-content: center;
   margin: 0 auto; /* Centre le bouton horizontalement dans son conteneur */
-
+  background-color: #d1e7dd; /* Vert pâle */
+  color: #0f5132;
 }
 
 .timer-btn.running {
-  background-color: #ef4444;
-  color: white;
+  background-color: #f8d7da; /* Rouge pâle */
+  color: #842029;
 }
 
 /* Media Queries for Responsive Design */
