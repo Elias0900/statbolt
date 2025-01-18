@@ -10,6 +10,7 @@ interface Game {
 
 // Initialise le client Supabase uniquement si les variables d'environnement sont disponibles
 let supabase: ReturnType<typeof createClient> | null = null;
+const database = import.meta.env.VITE_DATABASE_NAME;
 
 const initializeSupabase = () => {
   // Accéder aux variables d'environnement VITE_
@@ -36,7 +37,7 @@ export const saveGame = async (game: Game): Promise<void> => {
 
   try {
     const { error } = await client
-        .from('games_rec')
+        .from(database)
         .insert([
           {
             date: game.date.toISOString(),
@@ -61,7 +62,7 @@ export const loadGames = async (): Promise<Game[]> => {
 
   try {
     const { data, error } = await client
-        .from('games_rec') // Nom de la table
+        .from(database) // Nom de la table
         .select('*'); // Sélectionne toutes les colonnes
 
     if (error) {
