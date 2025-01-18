@@ -32,6 +32,7 @@ export interface TeamStats extends PlayerStats {
 }
 
 export interface Game {
+  id?: number;
   date: Date;
   name: string;
   players: Player[];

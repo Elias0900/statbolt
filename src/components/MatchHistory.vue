@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import {ref, onMounted, Ref, watch} from 'vue';
 import { loadGames } from '../db';
 import type { Game } from '../types';
 
+// Props et événements
 const props = defineProps<{
   show: boolean;
 }>();
@@ -11,12 +12,14 @@ const emit = defineEmits<{
   (e: 'close'): void;
 }>();
 
-const games = ref<Game[]>([]);
-const loading = ref(true);
-const error = ref<string | null>(null);
+// États
+const games: Ref<Game[]> = ref([]); // Tableau vide par défaut
+const loading: Ref<boolean> = ref(false);
+const error: Ref<string | null> = ref(null);
 
+// Formatage de la date
 const formatDate = (date: Date) => {
-  return new Date(date).toLocaleDateString('fr-FR', {
+  return date.toLocaleDateString('fr-FR', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -25,22 +28,40 @@ const formatDate = (date: Date) => {
   });
 };
 
-const loadMatchHistory = async () => {
+// Chargement des données
+const fetchGames = async () => {
+  loading.value = true; // Active l'état de chargement
+  error.value = null; // Réinitialise l'erreur précédente
+
   try {
-    loading.value = true;
-    error.value = null;
-    games.value = await loadGames();
-  } catch (e) {
-    error.value = "Erreur lors du chargement de l'historique";
-    console.error(e);
+    const loadedGames = await loadGames(); // Appel à la méthode `loadGames`
+    games.value = loadedGames; // Mise à jour des jeux
+  } catch (e: any) {
+    console.error('Erreur lors du chargement des jeux :', e);
+    error.value = e.message || 'Erreur inattendue lors du chargement des jeux.';
   } finally {
-    loading.value = false;
+    loading.value = false; // Désactive l'état de chargement
   }
 };
 
+// Monté du composant ou changement de `props.show`
 onMounted(() => {
   if (props.show) {
-    loadMatchHistory();
+    fetchGames();
+  }
+});
+
+// Recharger les données si `props.show` change
+watch(() => props.show, (newValue) => {
+  if (newValue) {
+    fetchGames();
+  }
+});
+
+// Monté du composant
+onMounted(() => {
+  if (props.show) {
+    loadGames();
   }
 });
 </script>
@@ -54,20 +75,24 @@ onMounted(() => {
       </div>
 
       <div class="modal-content">
+        <!-- Indicateur de chargement -->
         <div v-if="loading" class="loading">
           Chargement...
         </div>
 
+        <!-- Gestion des erreurs -->
         <div v-else-if="error" class="error">
           {{ error }}
         </div>
 
+        <!-- Aucun match trouvé -->
         <div v-else-if="games.length === 0" class="empty">
           Aucun match enregistré
         </div>
 
+        <!-- Liste des matchs -->
         <div v-else class="games-list">
-          <div v-for="game in games" :key="game.date.toString()" class="game-item">
+          <div v-for="game in games" :key="game.id || game.date.toString()" class="game-item">
             <div class="game-header">
               <h3>{{ game.name }}</h3>
               <span class="game-date">{{ formatDate(game.date) }}</span>
