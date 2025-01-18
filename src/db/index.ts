@@ -54,37 +54,29 @@ export const saveGame = async (game: Game): Promise<void> => {
 };
 
 // Fonction pour charger les jeux depuis la base de données
+// Fonction pour charger les jeux depuis la base de données
 export const loadGames = async (): Promise<Game[]> => {
   const client = initializeSupabase();
 
   try {
     const { data, error } = await client
-        .from('games')
-        .select('*')
-        .order('date', { ascending: false });
+        .from('games') // Nom de la table
+        .select('*'); // Sélectionne toutes les colonnes
 
     if (error) {
-      console.error('Erreur lors de la récupération des jeux :', error);
+      console.error('Erreur lors du chargement des jeux :', error);
       throw new Error(`Impossible de charger les jeux : ${error.message}`);
     }
 
-    if (!data || !Array.isArray(data)) {
-      throw new Error('Les données récupérées sont invalides ou mal formatées.');
-    }
+    // Assurez-vous de convertir les données au format `Game` attendu
+    const games: Game[] = data.map((game: any) => ({
+      id: game.id,
+      date: new Date(game.date),
+      name: game.name,
+      players: game.players,
+    }));
 
-    // Transformation des données
-    return data.map((game: any) => {
-      if (typeof game.date !== 'string' && !(game.date instanceof Date)) {
-        throw new Error(`Date invalide pour le jeu avec ID ${game.id}`);
-      }
-
-      return {
-        id: game.id as number, // Force le type à `number`
-        date: new Date(game.date), // Convertit en objet Date
-        name: game.name || 'Nom inconnu', // Fournit une valeur par défaut
-        players: Array.isArray(game.players) ? game.players : [], // Vérifie que players est un tableau
-      };
-    });
+    return games;
   } catch (e) {
     console.error('Erreur inattendue lors du chargement des jeux :', e);
     throw e;
