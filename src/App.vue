@@ -275,7 +275,7 @@ onUnmounted(() => {
   margin: 0 auto;
   padding: 0.5rem;
   overflow-x: hidden; /* Ajout pour éviter le scroll horizontal */
-  background-color: #f8f9fa; /* Fond pâle et agréable */
+  background-color: #fdfdfd; /* Fond crème plus doux */
 }
 
 .recenter-btn {
@@ -284,13 +284,13 @@ onUnmounted(() => {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #d1e7dd; /* Vert pâle */
-  color: #0f5132;
+  background-color: #e3f2fd; /* Bleu pastel */
+  color: #0d47a1;
   transition: background-color 0.3s ease;
 }
 
 .recenter-btn:hover {
-  background-color: #c7dbd4; /* Vert encore plus clair */
+  background-color: #d7e9f7; /* Bleu encore plus clair */
 }
 
 /* Header */
@@ -324,6 +324,11 @@ onUnmounted(() => {
   max-width: 250px;
   transition: border-color 0.2s ease;
   background-color: #f8f9fa; /* Fond pâle */
+}
+
+.match-name-input:hover {
+  border: 1.5px solid #84aedc;
+
 }
 
 .match-name-input:focus {
@@ -406,6 +411,10 @@ button:not(:disabled):hover {
   border-radius: 7px;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.player-chip:hover {
+  background: #bbbaba; /* Gris très clair */
 }
 
 .player-chip.active {
