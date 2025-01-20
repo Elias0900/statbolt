@@ -57,7 +57,7 @@ function calculatePER(player: Player): number {
   return (positiveContribution - negativeContribution) / playingTimeInMinutes;
 }
 
-props.player.stats.evaluation = calculatePER(props.player)
+const playerEvaluation = computed(() => calculatePER(props.player));
 
 const shootingPercentage = computed(() => {
   return {
@@ -123,7 +123,7 @@ const exportStatsPDF = () => {
     ['Interceptions', props.player.stats.steals.toString()],
     ['Contres', props.player.stats.block.toString()],
     ['Pertes de balle', props.player.stats.turnovers.toString()],
-    ['Evaluation', props.player.stats.evaluation]
+    ['Evaluation', playerEvaluation.value]
   ];
   
   (doc as any).autoTable({
@@ -257,7 +257,7 @@ const exportStatsPDF = () => {
 
     <div class="card-footer">
       <div class="total-points">
-        Evaluation: {{ player.stats.evaluation }}
+        Evaluation: {{ playerEvaluation.toFixed(0) }}
       </div>
       <button class="export-btn" @click="exportStatsPDF">
         📥 Exporter
