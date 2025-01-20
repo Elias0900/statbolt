@@ -24,24 +24,40 @@ const totalPoints = computed(() => {
          props.player.stats.freeThrowsMade;
 });
 
-const plusminus = computed(() => {
-  return (
-    props.player.stats.freeThrowsMade +
-    props.player.stats.points2Made +
-    props.player.stats.points3Made +
-    props.player.stats.defensiveRebounds +
-    props.player.stats.offensiveRebounds +
-    props.player.stats.assists +
-    props.player.stats.steals +
-    props.player.stats.block - 
-    props.player.stats.points2Missed - 
-    props.player.stats.points3Missed - 
-    props.player.stats.freeThrowsMissed - 
-    props.player.stats.turnovers
-  );
-});
+function calculatePER(player: Player): number {
+  const stats = player.stats;
 
-props.player.stats.evaluation = plusminus.value
+  // Contributions positives
+  const positiveContribution =
+      2 * stats.points2Made +
+      3 * stats.points3Made +
+      stats.freeThrowsMade +
+      stats.offensiveRebounds +
+      stats.defensiveRebounds +
+      stats.assists +
+      stats.steals +
+      stats.block;
+
+  // Contributions négatives
+  const negativeContribution =
+      stats.points2Missed +
+      stats.points3Missed +
+      stats.freeThrowsMissed +
+      stats.turnovers;
+
+  // Temps de jeu en minutes
+  const playingTimeInMinutes = player.playingTime / 60;
+
+  // Éviter la division par zéro
+  if (playingTimeInMinutes === 0) {
+    return 0; // Si le joueur n'a pas joué, PER = 0
+  }
+
+  // Calcul final du PER
+  return (positiveContribution - negativeContribution) / playingTimeInMinutes;
+}
+
+props.player.stats.evaluation = calculatePER(props.player)
 
 const shootingPercentage = computed(() => {
   return {
@@ -107,7 +123,7 @@ const exportStatsPDF = () => {
     ['Interceptions', props.player.stats.steals.toString()],
     ['Contres', props.player.stats.block.toString()],
     ['Pertes de balle', props.player.stats.turnovers.toString()],
-    ['Evaluation', plusminus.value.toString()]
+    ['Evaluation', props.player.stats.evaluation]
   ];
   
   (doc as any).autoTable({
